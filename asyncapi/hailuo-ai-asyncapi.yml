@@ -1,0 +1,156 @@
+asyncapi: 2.6.0
+info:
+  title: MiniMax Text-to-Speech (T2A) WebSocket API
+  version: '1.0'
+  description: >-
+    MiniMax publishes a documented real-time text-to-speech WebSocket API. A
+    client opens a WebSocket connection to wss://api.minimax.io/ws/v1/t2a_v2
+    (US West: wss://api-uw.minimax.io/ws/v1/t2a_v2), authenticates with a Bearer
+    API key, sends a task_start event with the model and voice settings, streams
+    text with task_continue events, and receives audio chunks pushed back over the
+    same connection as they are synthesized. This is a genuine bidirectional
+    server-push transport, distinct from the synchronous HTTP T2A endpoint.
+
+    This document models the event flow from MiniMax's published WebSocket guide.
+    Exact event field names should be reconciled against the live reference.
+  x-transport-notes: >-
+    Transport is WebSocket (wss). This is separate from and in addition to the
+    synchronous HTTP POST /v1/t2a_v2 endpoint. Video generation, by contrast, is
+    asynchronous HTTP polling (create task / query / retrieve) and has no
+    WebSocket surface.
+servers:
+  production:
+    url: api.minimax.io
+    protocol: wss
+    pathname: /ws/v1/t2a_v2
+    description: MiniMax International real-time T2A WebSocket.
+    security:
+      - bearerAuth: []
+  us-west:
+    url: api-uw.minimax.io
+    protocol: wss
+    pathname: /ws/v1/t2a_v2
+    description: US West region, lower time-to-first-audio.
+    security:
+      - bearerAuth: []
+channels:
+  /ws/v1/t2a_v2:
+    description: >-
+      Real-time text-to-speech session. The client drives the session with
+      task_start / task_continue / task_finish events; the server streams
+      connected_success, then audio_chunk events, then task_finished.
+    subscribe:
+      operationId: receiveAudioEvents
+      summary: Audio and status events pushed from MiniMax to the client.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ConnectedSuccess'
+          - $ref: '#/components/messages/AudioChunk'
+          - $ref: '#/components/messages/TaskFinished'
+    publish:
+      operationId: sendControlEvents
+      summary: Control events sent from the client to MiniMax.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TaskStart'
+          - $ref: '#/components/messages/TaskContinue'
+          - $ref: '#/components/messages/TaskFinish'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: httpApiKey
+      name: Authorization
+      in: header
+      description: 'Bearer API key: Authorization: Bearer {api_key}.'
+  messages:
+    TaskStart:
+      name: task_start
+      title: Start a synthesis task
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: task_start
+          model:
+            type: string
+            example: speech-2.6-hd
+          voice_setting:
+            type: object
+            properties:
+              voice_id:
+                type: string
+                example: male-qn-qingse
+              speed:
+                type: number
+              vol:
+                type: number
+              pitch:
+                type: integer
+          audio_setting:
+            type: object
+            properties:
+              sample_rate:
+                type: integer
+                example: 32000
+              format:
+                type: string
+                example: mp3
+    TaskContinue:
+      name: task_continue
+      title: Stream text to synthesize
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: task_continue
+          text:
+            type: string
+            example: Streaming text to be spoken in real time.
+    TaskFinish:
+      name: task_finish
+      title: End the synthesis task
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: task_finish
+    ConnectedSuccess:
+      name: connected_success
+      title: Connection established
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: connected_success
+          session_id:
+            type: string
+    AudioChunk:
+      name: audio_chunk
+      title: Streamed audio chunk
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: task_continued
+          data:
+            type: object
+            properties:
+              audio:
+                type: string
+                description: Hex-encoded audio chunk.
+    TaskFinished:
+      name: task_finished
+      title: Task complete
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: task_finished
+          extra_info:
+            type: object

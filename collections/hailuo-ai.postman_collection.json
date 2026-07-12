@@ -1,0 +1,102 @@
+{
+  "info": {
+    "name": "Hailuo AI / MiniMax API",
+    "description": "MiniMax's Hailuo generative video and audio platform. Primary surface is asynchronous AI video generation (create task / query / retrieve file). Also includes text-to-speech (T2A v2, with a real-time WebSocket variant), OpenAI-compatible chat completions, and music generation. Base URL: https://api.minimax.io/v1. All requests require a Bearer API key.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.minimax.io/v1", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Video Generation",
+      "item": [
+        {
+          "name": "Create a video generation task",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"model\": \"MiniMax-Hailuo-2.3\",\n  \"prompt\": \"A cinematic drone shot flying over a neon-lit city at night.\",\n  \"duration\": 6,\n  \"resolution\": \"1080P\",\n  \"prompt_optimizer\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/video_generation", "host": ["{{baseUrl}}"], "path": ["video_generation"] },
+            "description": "Submits a Hailuo video generation request (text-to-video, image-to-video, first-last-frame, or subject-reference) and returns a task_id."
+          }
+        },
+        {
+          "name": "Query a video generation task",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/query/video_generation?task_id={{task_id}}", "host": ["{{baseUrl}}"], "path": ["query", "video_generation"], "query": [{ "key": "task_id", "value": "{{task_id}}" }] },
+            "description": "Polls task status. Returns Queueing/Preparing/Processing, then Success (with file_id) or Fail. Poll about every 10 seconds."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "item": [
+        {
+          "name": "Retrieve a generated file",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/files/retrieve?file_id={{file_id}}", "host": ["{{baseUrl}}"], "path": ["files", "retrieve"], "query": [{ "key": "file_id", "value": "{{file_id}}" }] },
+            "description": "Returns a temporary download URL for the finished MP4 (video URLs valid for about 9 hours)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Text to Speech",
+      "item": [
+        {
+          "name": "Synthesize speech (T2A v2)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"model\": \"speech-2.6-hd\",\n  \"text\": \"Welcome to the API Evangelist network.\",\n  \"voice_setting\": { \"voice_id\": \"male-qn-qingse\", \"speed\": 1.0 },\n  \"audio_setting\": { \"format\": \"mp3\", \"sample_rate\": 32000 }\n}" },
+            "url": { "raw": "{{baseUrl}}/t2a_v2", "host": ["{{baseUrl}}"], "path": ["t2a_v2"] },
+            "description": "Synchronous text-to-speech. A real-time WebSocket variant is documented at wss://api.minimax.io/ws/v1/t2a_v2."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat Completions",
+      "item": [
+        {
+          "name": "Create a chat completion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"model\": \"MiniMax-M1\",\n  \"messages\": [ { \"role\": \"user\", \"content\": \"Hello!\" } ]\n}" },
+            "url": { "raw": "{{baseUrl}}/chat/completions", "host": ["{{baseUrl}}"], "path": ["chat", "completions"] },
+            "description": "OpenAI-compatible chat completions served by MiniMax LLMs."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Music Generation",
+      "item": [
+        {
+          "name": "Generate a vocal song (modeled)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"model\": \"music-1.5\",\n  \"prompt\": \"Upbeat synthwave with driving drums.\",\n  \"lyrics\": \"[verse] Neon lights over the city tonight\"\n}" },
+            "url": { "raw": "{{baseUrl}}/music_generation", "host": ["{{baseUrl}}"], "path": ["music_generation"] },
+            "description": "Generates a vocal song from a style prompt plus lyrics. Endpoint payload is modeled; reconcile against the live reference."
+          }
+        }
+      ]
+    }
+  ]
+}

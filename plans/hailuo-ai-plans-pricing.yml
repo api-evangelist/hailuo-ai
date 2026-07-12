@@ -1,0 +1,146 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Hailuo AI / MiniMax
+providerId: hailuo-ai
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Video Generation
+- AI Video
+- Generative AI
+- Text-to-Video
+- Plans
+description: >-
+  MiniMax offers two purchasing paths. Consumer Hailuo AI plans (hailuoai.video)
+  are monthly subscriptions from a free tier up to about $199.99/month, granting a
+  monthly pool of credits (roughly 1,000 to 20,000) that generate videos. The
+  developer platform (platform.minimax.io) is separate and is billed on a
+  pay-as-you-go basis: video generation is metered in "video points" per clip
+  (varying by model, resolution, and duration), and text/audio APIs are metered
+  per token / per character. Failed generations or clips blocked by security
+  review are not charged.
+notes: >-
+  Video-point costs below are grounded in MiniMax's published video pricing but
+  can change; verify current rates at platform.minimax.io/docs/guides/pricing-video.
+  Per-clip API cost has been reported in the roughly $0.19-$0.56 range depending
+  on model/resolution/duration. Token and per-character rates for chat and TTS are
+  not reconciled here.
+sources:
+- https://platform.minimax.io/docs/guides/pricing-video
+- https://hailuoai.video/subscribe
+- https://www.minimax.io/
+plans:
+- id: hailuo-consumer-free
+  name: Hailuo AI Free (Consumer)
+  type: free
+  description: >-
+    Free consumer tier on hailuoai.video with a limited monthly credit allowance
+    for trying video and image generation in the web app.
+  entries:
+  - label: Monthly Credits
+    name: free_credits
+    type: usage
+    metric: credits
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 (limited monthly credit allowance)
+    userMultiplied: false
+  elements:
+  - name: Web App Access
+  - name: Hailuo Video Generation
+- id: hailuo-consumer-subscription
+  name: Hailuo AI Subscription (Consumer)
+  type: paid
+  description: >-
+    Consumer monthly subscriptions ranging up to about $199.99/month, granting a
+    monthly credit pool (approximately 1,000 to 20,000 credits) that generates
+    roughly 40 to 900 videos at economical settings.
+  entries:
+  - label: Monthly Credit Pool
+    name: subscription_credits
+    type: usage
+    metric: credits
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: tiered monthly (up to ~$199.99/mo); ~1,000-20,000 credits per tier
+    userMultiplied: false
+  elements:
+  - name: Higher Credit Allowance
+  - name: Faster / Priority Generation
+  - name: Higher Resolution Options
+- id: minimax-api-payg
+  name: MiniMax Developer API (Pay-As-You-Go)
+  type: usage
+  description: >-
+    Self-service developer platform billed by consumption. Video generation is
+    metered in video points per clip; chat/LLM and audio APIs are metered per
+    token / per character. Reported per-clip API cost is roughly $0.19-$0.56.
+  entries:
+  - label: Video Generation (video points per clip)
+    name: video_points
+    type: usage
+    metric: clips
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: >-
+      per-clip video points, e.g. MiniMax-Hailuo-02 512P/6s = 0.3 pts, 768P/6s =
+      1 pt, 1080P/6s = 2 pts; MiniMax-Hailuo-2.3-Fast 1080P/6s = 1.3 pts
+    userMultiplied: false
+  - label: Text / Chat (per token)
+    name: llm_tokens
+    type: usage
+    metric: tokens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000000
+    price: per-million-token pricing per model (see platform pricing)
+    userMultiplied: false
+  - label: Text-to-Speech (per character)
+    name: tts_characters
+    type: usage
+    metric: characters
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000000
+    price: per-character pricing per speech model (see platform pricing)
+    userMultiplied: false
+  elements:
+  - name: Video Generation API (Hailuo)
+  - name: Chat Completions API
+  - name: Text-to-Speech API (HTTP + WebSocket)
+  - name: Music Generation API
+  - name: No Charge for Failed / Blocked Generations
+- id: minimax-enterprise
+  name: Enterprise / Custom
+  type: enterprise
+  description: >-
+    Custom terms for high-volume API usage, dedicated capacity, and negotiated
+    rates. Contact MiniMax.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Volume Discounts
+  - name: Dedicated Capacity
+  - name: Support and SLAs
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

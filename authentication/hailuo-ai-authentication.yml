@@ -1,0 +1,22 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/hailuo-ai-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: 'Bearer API key created in the MiniMax platform console under Account
+    Management > API Keys (both pay-as-you-go and subscription keys are supported).
+    Passed as `Authorization: Bearer {api_key}` on every HTTP request and on the
+    T2A WebSocket handshake.'
+  sources:
+  - openapi/hailuo-ai-openapi.yml
+  - https://platform.minimax.io/docs/api-reference/speech-t2a-http
+notes: >-
+  International users authenticate against api.minimax.io / intl.minimaxi.com;
+  mainland China users authenticate against api.minimaxi.chat. The same Bearer
+  scheme applies to video generation, chat completions, text-to-speech, and music
+  generation endpoints, and to the real-time T2A WebSocket.

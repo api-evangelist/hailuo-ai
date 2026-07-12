@@ -1,0 +1,101 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Hailuo AI / MiniMax
+providerId: hailuo-ai
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Video Generation
+- AI Video
+- Generative AI
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Hailuo AI / MiniMax spend. On the developer platform, cost is
+  consumption-based across distinct meters: video generation is metered in video
+  points per clip (driven by model, resolution, and duration), LLM chat is metered
+  per token, and text-to-speech is metered per character. Consumer Hailuo AI plans
+  are flat monthly subscriptions that grant a credit pool. The dominant and most
+  variable line item for API teams is video generation, where per-clip cost scales
+  sharply with resolution (512P to 1080P) and duration (6s to 10s). Failed or
+  security-blocked generations are not billed.
+notes: >-
+  Per-unit video-point and per-token rates change; verify on
+  platform.minimax.io/docs/guides/pricing-video. Optimize by matching model tier
+  (e.g. MiniMax-Hailuo-02 or the Fast variant) and resolution/duration to the
+  actual delivery need, and by using prompt_optimizer to reduce wasted retries.
+sources:
+- https://platform.minimax.io/docs/guides/pricing-video
+- https://www.minimax.io/
+- https://hailuoai.video/subscribe
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: MiniMax
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: MiniMax Video Generation
+  ServiceCategory: AI and Machine Learning
+  ProviderName: MiniMax
+  PublisherName: MiniMax
+  InvoiceIssuerName: MiniMax
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: video_points
+  description: Video points consumed per generated clip; scales with model, resolution, and duration.
+  unit: points
+  aggregation: sum
+  dimensions:
+  - account
+  - model
+  - resolution
+  - duration
+- name: llm_tokens
+  description: Tokens consumed by chat completions, billed per million.
+  unit: tokens
+  aggregation: sum
+  dimensions:
+  - account
+  - model
+- name: tts_characters
+  description: Characters synthesized by the text-to-speech API, billed per character.
+  unit: characters
+  aggregation: sum
+  dimensions:
+  - account
+  - model
+- name: subscription_credits
+  description: Consumer Hailuo AI monthly credit pool drawn down per video/image generation.
+  unit: credits
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+principles:
+- name: Visibility
+  description: Track video points per model/resolution/duration and token/character throughput per API so the video line item is not conflated with text/audio.
+- name: Allocation
+  description: Tag API keys per workload/team so video-point and token spend maps to internal cost centers.
+- name: Optimization
+  description: Right-size model tier and resolution/duration to the delivery need; use the Fast/02 variants for drafts and reserve 1080P for finals; use prompt_optimizer to cut failed retries (failures are not billed).
+- name: Accountability
+  description: Review monthly video-point burn against forecast; watch for high-resolution long-duration clips that dominate cost.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

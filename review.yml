@@ -1,0 +1,90 @@
+aid: hailuo-ai
+name: Hailuo AI / MiniMax
+review:
+  question: Does Hailuo AI / MiniMax expose a documented public WebSocket API?
+  answer: true
+  date: '2026-07-11'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: true
+  asyncapiScopeNote: |
+    MiniMax documents a real-time Text-to-Speech (T2A) WebSocket API at
+    wss://api.minimax.io/ws/v1/t2a_v2 (US West: wss://api-uw.minimax.io/ws/v1/t2a_v2).
+    This is a genuine bidirectional server-push transport: the client sends
+    task_start / task_continue / task_finish control events and the server
+    streams audio chunks back over the same connection. An AsyncAPI 2.6 document
+    was authored at asyncapi/hailuo-ai-asyncapi.yml modeling that event flow.
+    Note that the flagship VIDEO generation API (Hailuo) is NOT WebSocket - it is
+    asynchronous HTTP polling (create task, query status, retrieve file).
+findings:
+  summary: |
+    Yes. MiniMax (whose Hailuo product is the generative video platform) exposes a
+    documented public WebSocket API, but only for one product: real-time
+    text-to-speech (T2A v2). The WebSocket endpoint is wss://api.minimax.io/ws/v1/t2a_v2
+    with a US West variant at wss://api-uw.minimax.io/ws/v1/t2a_v2, authenticated
+    with a Bearer API key, and it streams synthesized audio chunks back to the
+    client as they are generated.
+
+    The Hailuo VIDEO generation API - the reason this provider was added - does
+    NOT use WebSocket. Video generation is an asynchronous HTTP flow: POST
+    /v1/video_generation returns a task_id, GET /v1/query/video_generation polls
+    until it returns a file_id, and GET /v1/files/retrieve returns a temporary
+    download URL (valid ~9 hours). The chat completions (OpenAI-compatible) and
+    music generation surfaces are also plain HTTPS request/response. The T2A HTTP
+    endpoint (POST /v1/t2a_v2) can additionally stream over chunked HTTP, but the
+    dedicated real-time transport is the documented WebSocket.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.minimax.io/v1
+      documented: true
+      note: Video generation (async task/query/retrieve), chat completions, T2A HTTP, and music generation are all HTTPS request/response.
+    - protocol: WebSocket
+      scheme: wss
+      baseURL: wss://api.minimax.io/ws/v1/t2a_v2
+      documented: true
+      note: Real-time text-to-speech only. US West variant wss://api-uw.minimax.io/ws/v1/t2a_v2. Bidirectional; server streams audio chunks.
+    - protocol: HTTP Streaming
+      scheme: https
+      documented: true
+      note: T2A HTTP (POST /v1/t2a_v2 with stream=true) and chat completions (stream=true) deliver chunked responses. Not WebSocket.
+  endpointsConfirmed:
+    - POST https://api.minimax.io/v1/video_generation
+    - GET  https://api.minimax.io/v1/query/video_generation?task_id={task_id}
+    - GET  https://api.minimax.io/v1/files/retrieve?file_id={file_id}
+    - POST https://api.minimax.io/v1/t2a_v2
+    - WSS  wss://api.minimax.io/ws/v1/t2a_v2
+    - POST https://api.minimax.io/v1/chat/completions
+  endpointsModeled:
+    - POST https://api.minimax.io/v1/music_generation
+    - note: Music generation endpoint path follows MiniMax's published music API convention; payload schema is modeled and should be reconciled against the live reference.
+  accessModel: |
+    Public developer platform with self-service signup at platform.minimax.io.
+    Both pay-as-you-go API keys and subscription keys are issued from the console.
+    International traffic uses api.minimax.io / intl.minimaxi.com; mainland China
+    uses api.minimaxi.chat. No approval gate is documented for basic API access,
+    though some models and regions differ in availability.
+sources:
+  - url: https://platform.minimax.io/docs/guides/video-generation
+    type: Documentation
+    note: Video generation base URL https://api.minimax.io/v1; async create/query/retrieve flow; models MiniMax-Hailuo-2.3, MiniMax-Hailuo-02, S2V-01; Bearer auth.
+  - url: https://www.minimax.io/news/video-generation-api
+    type: Documentation
+    note: Confirms three-step async workflow (task_id, file_id, download URL) and 9-hour URL validity.
+  - url: https://platform.minimax.io/docs/api-reference/speech-t2a-http
+    type: APIReference
+    note: T2A HTTP endpoint POST /v1/t2a_v2; models speech-2.8/2.6/02/01 hd/turbo; 10,000-character limit; Bearer auth.
+  - url: https://platform.minimax.io/docs/api-reference/api-overview
+    type: Documentation
+    note: Lists product categories including a documented WebSocket T2A API alongside the HTTP T2A API.
+  - url: https://platform.minimax.io/docs
+    type: Documentation
+    note: Developer platform root; chat completions are OpenAI-compatible; music generation and voice cloning are additional documented APIs.
+actions:
+  asyncapiPath: asyncapi/hailuo-ai-asyncapi.yml
+  apisYmlUpdated: true
+  reason: |
+    A documented WebSocket transport exists (real-time T2A). An AsyncAPI 2.6
+    document was authored for that WebSocket event flow, with the transport
+    labeled wss throughout so it is never confused with the async HTTP video
+    polling flow. The video, chat, and music surfaces are modeled in the OpenAPI
+    document. The music_generation endpoint is flagged as modeled.

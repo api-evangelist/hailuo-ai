@@ -1,0 +1,70 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Hailuo AI / MiniMax
+providerId: hailuo-ai
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Video Generation
+- AI Video
+- Generative AI
+- Rate Limiting
+- Quotas
+description: >-
+  MiniMax does not publish a single fixed numeric rate-limit table for its
+  developer APIs. Video generation is asynchronous and effectively governed by
+  concurrent-task limits and your account's video-point balance rather than a
+  per-minute request cap: you create a task, then poll GET /query/video_generation
+  (MiniMax recommends about a 10-second polling interval to avoid unnecessary
+  load). Text/chat and text-to-speech APIs are governed by per-account
+  requests-per-minute and tokens/characters-per-minute quotas that vary by model
+  and account tier. Concrete numeric limits should be confirmed in the console.
+notes: >-
+  Poll video tasks roughly every 10 seconds. Generated video download URLs are
+  temporary (valid about 9 hours / 32,400 seconds), so retrieve and persist
+  assets promptly. Numeric per-endpoint limits are not fully documented publicly
+  and differ by model, region (api.minimax.io vs api.minimaxi.chat), and tier.
+sources:
+- https://platform.minimax.io/docs/guides/video-generation
+- https://www.minimax.io/news/video-generation-api
+- https://platform.minimax.io/docs/api-reference/speech-t2a-http
+responseCodes:
+  throttled: 429
+limits:
+- name: Video Generation Concurrent Tasks
+  scope: account
+  metric: tasks
+  limit: not published (tier-dependent)
+  notes: Async video tasks are bounded by concurrent-task limits and video-point balance rather than a request-rate cap.
+- name: Video Task Polling
+  scope: account
+  metric: requests
+  limit: recommended ~1 request / 10 seconds per task
+  notes: MiniMax recommends a ~10-second polling interval on GET /query/video_generation.
+- name: Chat / LLM Requests
+  scope: account
+  metric: requests
+  limit: per-model RPM (not published)
+  notes: Requests-per-minute and tokens-per-minute quotas vary by model and account tier.
+- name: Text-to-Speech Requests
+  scope: account
+  metric: requests
+  limit: per-model RPM (not published)
+  notes: T2A HTTP and WebSocket are bounded by per-account concurrency and character throughput.
+- name: Download URL Validity
+  scope: file
+  metric: seconds
+  limit: 32400
+  notes: Retrieved video download URLs expire after about 9 hours; persist assets promptly.
+policies:
+- name: Asynchronous Backpressure
+  description: Video generation is queued (Queueing/Preparing/Processing); throughput is managed by the task queue rather than by rejecting requests outright.
+- name: Backoff Strategy
+  description: Clients should poll on the recommended interval and implement exponential backoff with jitter, honoring Retry-After on 429 responses.
+- name: No Charge on Failure
+  description: Failed generations and clips blocked by security review do not consume video points.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

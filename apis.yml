@@ -1,0 +1,162 @@
+aid: hailuo-ai
+url: https://raw.githubusercontent.com/api-evangelist/hailuo-ai/refs/heads/main/apis.yml
+name: Hailuo AI / MiniMax
+kind: company
+description: Hailuo AI is MiniMax's generative video and audio platform. MiniMax is
+  a Singapore- and China-based foundation-model company whose developer platform
+  (platform.minimax.io / api.minimax.io, and intl.minimaxi.com for international
+  users) exposes documented HTTP APIs for AI video generation (the Hailuo
+  text-to-video and image-to-video models - MiniMax-Hailuo-2.3, MiniMax-Hailuo-02,
+  Video-01, T2V-01, I2V-01, S2V-01), large language model chat completions (the
+  MiniMax / abab family), text-to-speech (T2A) over both HTTP and a real-time
+  WebSocket, music generation, and voice cloning. Video generation follows an
+  asynchronous create-task-then-poll pattern; all APIs authenticate with a Bearer
+  API key.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Video Generation
+- AI Video
+- Generative AI
+- Text-to-Video
+- Image-to-Video
+- Text to Speech
+- LLM
+- Foundation Models
+created: '2026-07-11'
+modified: '2026-07-11'
+specificationVersion: '0.19'
+apis:
+- aid: hailuo-ai:hailuo-ai-video-generation-api
+  name: Hailuo Video Generation API
+  tags:
+  - Video Generation
+  - AI Video
+  - Text-to-Video
+  - Image-to-Video
+  - Generative AI
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://platform.minimax.io/docs/guides/video-generation
+  baseURL: https://api.minimax.io/v1
+  properties:
+  - url: https://platform.minimax.io/docs/guides/video-generation
+    type: Documentation
+  - url: https://www.minimax.io/news/video-generation-api
+    type: APIReference
+  - url: openapi/hailuo-ai-openapi.yml
+    type: OpenAPI
+  - url: collections/hailuo-ai.postman_collection.json
+    type: PostmanCollection
+  - url: collections/hailuo-ai.opencollection.json
+    type: OpenCollection
+  description: 'Asynchronous AI video generation powered by the Hailuo models
+    (MiniMax-Hailuo-2.3, MiniMax-Hailuo-02, Video-01, T2V-01, I2V-01, S2V-01).
+    Supports text-to-video, image-to-video, first-and-last-frame video, and
+    subject-reference video (face-consistent characters), with configurable
+    duration and resolution up to 1080P. Three-step flow: POST /video_generation
+    to create a task and receive a task_id, GET /query/video_generation to poll
+    status and receive a file_id, then GET /files/retrieve to obtain a temporary
+    download URL for the finished MP4.'
+- aid: hailuo-ai:hailuo-ai-text-to-speech-api
+  name: MiniMax Text-to-Speech (T2A) API
+  tags:
+  - Text to Speech
+  - Audio
+  - Voice
+  - WebSocket
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://platform.minimax.io/docs/api-reference/speech-t2a-http
+  baseURL: https://api.minimax.io/v1
+  properties:
+  - url: https://platform.minimax.io/docs/api-reference/speech-t2a-http
+    type: Documentation
+  - url: openapi/hailuo-ai-openapi.yml
+    type: OpenAPI
+  - url: asyncapi/hailuo-ai-asyncapi.yml
+    type: AsyncAPI
+  - url: collections/hailuo-ai.postman_collection.json
+    type: PostmanCollection
+  description: 'Speech synthesis (T2A v2) across the speech-2.8, speech-2.6,
+    speech-02, and speech-01 HD/turbo models, with 100+ voices, emotion and
+    language control, and per-request voice and audio settings. Available both as a
+    synchronous HTTP endpoint (POST /t2a_v2) and as a documented real-time
+    WebSocket API (wss://api.minimax.io/ws/v1/t2a_v2) that streams audio chunks as
+    they are generated.'
+- aid: hailuo-ai:hailuo-ai-chat-completions-api
+  name: MiniMax Chat Completions API
+  tags:
+  - LLM
+  - Chat
+  - Completions
+  - Foundation Models
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://platform.minimax.io/docs/api-reference/text-generation
+  baseURL: https://api.minimax.io/v1
+  properties:
+  - url: https://platform.minimax.io/docs/api-reference/text-generation
+    type: Documentation
+  - url: openapi/hailuo-ai-openapi.yml
+    type: OpenAPI
+  - url: collections/hailuo-ai.postman_collection.json
+    type: PostmanCollection
+  description: 'OpenAI-compatible chat completions (POST /chat/completions) served
+    by MiniMax''s large language models (the MiniMax-M / abab family), with
+    streaming, tool/function calling, and long-context support. MiniMax also
+    exposes OpenAI- and Anthropic-SDK-compatible surfaces for the same models.'
+- aid: hailuo-ai:hailuo-ai-music-generation-api
+  name: MiniMax Music Generation API
+  tags:
+  - Music Generation
+  - Audio
+  - Generative AI
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://platform.minimax.io/docs/api-reference/music-generation
+  baseURL: https://api.minimax.io/v1
+  properties:
+  - url: https://platform.minimax.io/docs/api-reference/music-generation
+    type: Documentation
+  - url: openapi/hailuo-ai-openapi.yml
+    type: OpenAPI
+  description: 'Generates a vocal song from a music-style description (prompt) plus
+    lyrics via POST /music_generation. Endpoint path and payload are modeled from
+    MiniMax''s published music API; confirm exact fields against the live
+    music-generation reference during reconciliation.'
+- aid: hailuo-ai:hailuo-ai-files-api
+  name: MiniMax Files API
+  tags:
+  - Files
+  - Storage
+  - Downloads
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://platform.minimax.io/docs/api-reference
+  baseURL: https://api.minimax.io/v1
+  properties:
+  - url: https://platform.minimax.io/docs/guides/video-generation
+    type: Documentation
+  - url: openapi/hailuo-ai-openapi.yml
+    type: OpenAPI
+  description: 'Retrieves generated assets by file_id (GET /files/retrieve),
+    returning a temporary download URL - video URLs are valid for roughly 9 hours
+    (32,400 seconds). Used to fetch the finished MP4 after a video task completes,
+    and to manage uploaded inputs.'
+common:
+- type: Authentication
+  url: authentication/hailuo-ai-authentication.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/minimax-ai
+- type: Website
+  url: https://www.minimax.io/
+- type: Documentation
+  url: https://platform.minimax.io/docs
+- type: Plans
+  url: plans/hailuo-ai-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/hailuo-ai-rate-limits.yml
+- type: FinOps
+  url: finops/hailuo-ai-finops.yml
+- type: SignUp
+  url: https://platform.minimax.io/login
+- url: https://www.minimax.io/news
+  type: Blog
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
