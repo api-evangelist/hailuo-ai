@@ -139,6 +139,8 @@ apis:
     (32,400 seconds). Used to fetch the finished MP4 after a video task completes,
     and to manage uploaded inputs.'
 common:
+- type: AgenticAccess
+  url: agentic-access/hailuo-ai-agentic-access.yml
 - type: Authentication
   url: authentication/hailuo-ai-authentication.yml
 - type: LinkedIn
