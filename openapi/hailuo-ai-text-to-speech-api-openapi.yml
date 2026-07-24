@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: Hailuo AI / MiniMax Chat Completions Text to Speech API
+  description: 'Documented HTTP APIs for MiniMax''s Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.
+
+    Video generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax''s published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.'
+  version: '1.0'
+  contact:
+    name: MiniMax
+    url: https://platform.minimax.io
+  x-endpointsModeled: true
+  x-endpointsModeledNote: Video generation, query, and file-retrieve endpoints, HTTP methods, model names, and the async workflow are confirmed from live MiniMax docs. Detailed JSON schemas, and the music-generation endpoint payload, are honestly modeled and should be reconciled against the official reference before production use.
+servers:
+- url: https://api.minimax.io/v1
+  description: MiniMax International (global)
+- url: https://api-uw.minimax.io/v1
+  description: MiniMax International - US West (lower time-to-first-audio for T2A)
+- url: https://api.minimaxi.chat/v1
+  description: MiniMax Mainland China
+security:
+- bearerAuth: []
+tags:
+- name: Text to Speech
+  description: Speech synthesis (T2A v2).
+paths:
+  /t2a_v2:
+    post:
+      operationId: createSpeech
+      tags:
+      - Text to Speech
+      summary: Synthesize speech (T2A v2)
+      description: Synchronous text-to-speech over HTTP using the speech-2.8 / speech-2.6 / speech-02 / speech-01 HD or turbo models. Text must be under 10,000 characters. A real-time WebSocket variant is documented separately at wss://api.minimax.io/ws/v1/t2a_v2 (see the AsyncAPI document).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/T2ARequest'
+      responses:
+        '200':
+          description: Synthesized audio (hex-encoded or a URL) plus metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/T2AResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    T2AResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            audio:
+              type: string
+              description: Hex-encoded audio bytes (or a URL, per audio settings).
+            status:
+              type: integer
+        extra_info:
+          type: object
+        base_resp:
+          $ref: '#/components/schemas/BaseResp'
+    T2ARequest:
+      type: object
+      required:
+      - model
+      - text
+      properties:
+        model:
+          type: string
+          enum:
+          - speech-2.8-hd
+          - speech-2.8-turbo
+          - speech-2.6-hd
+          - speech-2.6-turbo
+          - speech-02-hd
+          - speech-02-turbo
+          - speech-01-hd
+          - speech-01-turbo
+          example: speech-2.6-hd
+        text:
+          type: string
+          description: Text to synthesize; must be under 10,000 characters.
+          example: Welcome to the API Evangelist network.
+        stream:
+          type: boolean
+          example: false
+        voice_setting:
+          type: object
+          properties:
+            voice_id:
+              type: string
+              example: male-qn-qingse
+            speed:
+              type: number
+              example: 1.0
+            vol:
+              type: number
+              example: 1.0
+            pitch:
+              type: integer
+              example: 0
+        audio_setting:
+          type: object
+          properties:
+            sample_rate:
+              type: integer
+              example: 32000
+            bitrate:
+              type: integer
+              example: 128000
+            format:
+              type: string
+              example: mp3
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResp'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key created in the MiniMax platform console under Account Management > API Keys. Passed as `Authorization: Bearer {api_key}`.'

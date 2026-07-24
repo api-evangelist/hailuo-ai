@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: Hailuo AI / MiniMax Chat Completions Files API
+  description: 'Documented HTTP APIs for MiniMax''s Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.
+
+    Video generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax''s published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.'
+  version: '1.0'
+  contact:
+    name: MiniMax
+    url: https://platform.minimax.io
+  x-endpointsModeled: true
+  x-endpointsModeledNote: Video generation, query, and file-retrieve endpoints, HTTP methods, model names, and the async workflow are confirmed from live MiniMax docs. Detailed JSON schemas, and the music-generation endpoint payload, are honestly modeled and should be reconciled against the official reference before production use.
+servers:
+- url: https://api.minimax.io/v1
+  description: MiniMax International (global)
+- url: https://api-uw.minimax.io/v1
+  description: MiniMax International - US West (lower time-to-first-audio for T2A)
+- url: https://api.minimaxi.chat/v1
+  description: MiniMax Mainland China
+security:
+- bearerAuth: []
+tags:
+- name: Files
+  description: Retrieve generated assets by file_id.
+paths:
+  /files/retrieve:
+    get:
+      operationId: retrieveFile
+      tags:
+      - Files
+      summary: Retrieve a generated file
+      description: Retrieves a generated asset by file_id and returns a temporary download URL. For video, the returned URL is valid for roughly 9 hours (32,400 seconds) before it expires.
+      parameters:
+      - name: file_id
+        in: query
+        required: true
+        description: The file_id returned by a successful query response.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File metadata including a temporary download_url.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileRetrieveResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResp'
+  schemas:
+    FileRetrieveResponse:
+      type: object
+      properties:
+        file:
+          type: object
+          properties:
+            file_id:
+              type: string
+              example: '205258526306433'
+            bytes:
+              type: integer
+              example: 5242880
+            created_at:
+              type: integer
+              example: 1731000000
+            filename:
+              type: string
+              example: output.mp4
+            purpose:
+              type: string
+              example: video_generation
+            download_url:
+              type: string
+              description: Temporary download URL. For video, valid for about 9 hours (32,400 seconds).
+              example: https://public-cdn.minimax.io/.../output.mp4
+        base_resp:
+          $ref: '#/components/schemas/BaseResp'
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key created in the MiniMax platform console under Account Management > API Keys. Passed as `Authorization: Bearer {api_key}`.'

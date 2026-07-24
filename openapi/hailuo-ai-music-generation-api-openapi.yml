@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Hailuo AI / MiniMax Chat Completions Music Generation API
+  description: 'Documented HTTP APIs for MiniMax''s Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.
+
+    Video generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax''s published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.'
+  version: '1.0'
+  contact:
+    name: MiniMax
+    url: https://platform.minimax.io
+  x-endpointsModeled: true
+  x-endpointsModeledNote: Video generation, query, and file-retrieve endpoints, HTTP methods, model names, and the async workflow are confirmed from live MiniMax docs. Detailed JSON schemas, and the music-generation endpoint payload, are honestly modeled and should be reconciled against the official reference before production use.
+servers:
+- url: https://api.minimax.io/v1
+  description: MiniMax International (global)
+- url: https://api-uw.minimax.io/v1
+  description: MiniMax International - US West (lower time-to-first-audio for T2A)
+- url: https://api.minimaxi.chat/v1
+  description: MiniMax Mainland China
+security:
+- bearerAuth: []
+tags:
+- name: Music Generation
+  description: Vocal music generation from prompt and lyrics.
+paths:
+  /music_generation:
+    post:
+      operationId: createMusicGeneration
+      tags:
+      - Music Generation
+      summary: Generate a vocal song (modeled)
+      description: Generates a vocal song from a music-style description (prompt) plus lyrics. Endpoint path and payload are modeled from MiniMax's published music API; reconcile against the live reference.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MusicGenerationRequest'
+      responses:
+        '200':
+          description: Generated audio (hex-encoded or a URL) plus metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MusicGenerationResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResp'
+  schemas:
+    MusicGenerationRequest:
+      type: object
+      required:
+      - model
+      - prompt
+      - lyrics
+      properties:
+        model:
+          type: string
+          example: music-1.5
+        prompt:
+          type: string
+          description: Music style / mood description.
+          example: Upbeat synthwave with driving drums.
+        lyrics:
+          type: string
+          description: Lyrics for the vocal track.
+          example: '[verse] Neon lights over the city tonight'
+        audio_setting:
+          type: object
+          properties:
+            sample_rate:
+              type: integer
+              example: 44100
+            bitrate:
+              type: integer
+              example: 256000
+            format:
+              type: string
+              example: mp3
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
+    MusicGenerationResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            audio:
+              type: string
+              description: Hex-encoded audio bytes (or a URL).
+        base_resp:
+          $ref: '#/components/schemas/BaseResp'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Bearer API key created in the MiniMax platform console under Account Management > API Keys. Passed as `Authorization: Bearer {api_key}`.'
