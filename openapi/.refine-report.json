@@ -1,0 +1,22 @@
+{
+  "provider": "hailuo-ai",
+  "sources": [
+    "hailuo-ai-chat-completions-api-openapi.yml",
+    "hailuo-ai-files-api-openapi.yml",
+    "hailuo-ai-music-generation-api-openapi.yml",
+    "hailuo-ai-text-to-speech-api-openapi.yml",
+    "hailuo-ai-video-generation-api-openapi.yml"
+  ],
+  "outputs": [
+    "hailuo-ai-chat-completions-api-openapi.yml",
+    "hailuo-ai-files-api-openapi.yml",
+    "hailuo-ai-music-generation-api-openapi.yml",
+    "hailuo-ai-text-to-speech-api-openapi.yml",
+    "hailuo-ai-video-generation-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
