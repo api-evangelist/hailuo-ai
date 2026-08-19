@@ -1,0 +1,332 @@
+{
+  "item": [
+    {
+      "id": "3613de0e-a373-48b9-8557-26ded61fa3ac",
+      "name": "Video Generation",
+      "description": {
+        "content": "Asynchronous AI video generation with the Hailuo models.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5821c442-83a4-46fe-a9cb-f13d34726643",
+          "name": "Create a video generation task",
+          "request": {
+            "name": "Create a video generation task",
+            "description": {
+              "content": "Submits a video generation request and returns a task_id. Supports text-to-video (prompt only), image-to-video (first_frame_image), first-and-last-frame video (first_frame_image + last_frame_image), and subject-reference video (subject_reference for face-consistent characters). The task is processed asynchronously; poll GET /query/video_generation with the returned task_id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "video_generation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"first_frame_image\": \"<string>\",\n  \"last_frame_image\": \"<string>\",\n  \"subject_reference\": [\n    {\n      \"type\": \"<string>\",\n      \"image\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"type\": \"<string>\",\n      \"image\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"duration\": \"<integer>\",\n  \"resolution\": \"<string>\",\n  \"prompt_optimizer\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fb31aeea-6bd2-4ccb-9889-b16d1fac2016",
+              "name": "Task accepted. Returns a task_id for polling.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "video_generation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"MiniMax-Hailuo-2.3\",\n  \"prompt\": \"A cinematic drone shot flying over a neon-lit city at night.\",\n  \"first_frame_image\": \"<string>\",\n  \"last_frame_image\": \"<string>\",\n  \"subject_reference\": [\n    {\n      \"type\": \"character\",\n      \"image\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"type\": \"character\",\n      \"image\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"duration\": 6,\n  \"resolution\": \"1080P\",\n  \"prompt_optimizer\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"106916112212032\",\n  \"base_resp\": {\n    \"status_code\": 0,\n    \"status_msg\": \"success\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ef901f4-0408-4c01-9c26-bb2e97185011",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "video_generation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"MiniMax-Hailuo-2.3\",\n  \"prompt\": \"A cinematic drone shot flying over a neon-lit city at night.\",\n  \"first_frame_image\": \"<string>\",\n  \"last_frame_image\": \"<string>\",\n  \"subject_reference\": [\n    {\n      \"type\": \"character\",\n      \"image\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"type\": \"character\",\n      \"image\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"duration\": 6,\n  \"resolution\": \"1080P\",\n  \"prompt_optimizer\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status_code\": 0,\n  \"status_msg\": \"success\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "52863324-7dc8-42ff-90c9-7817bb1ef049",
+          "name": "Query a video generation task",
+          "request": {
+            "name": "Query a video generation task",
+            "description": {
+              "content": "Checks the status of a video generation task by task_id. Status progresses through Queueing, Preparing, Processing, then Success (which includes a file_id) or Fail. A polling interval of about 10 seconds is recommended to avoid unnecessary load.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "query",
+                "video_generation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "task_id",
+                  "value": "<string>",
+                  "description": "(Required) The task_id returned by POST /video_generation."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3b14a668-4219-4ffa-b756-319f5732567d",
+              "name": "Current task status, plus file_id when the task has succeeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "query",
+                    "video_generation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "task_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"106916112212032\",\n  \"status\": \"Success\",\n  \"file_id\": \"205258526306433\",\n  \"base_resp\": {\n    \"status_code\": 0,\n    \"status_msg\": \"success\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e395822d-8910-4d83-8042-8b05dc68b948",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "query",
+                    "video_generation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "task_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status_code\": 0,\n  \"status_msg\": \"success\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.minimax.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8b3d470b-7f97-471b-83c6-e1f5c22aea8b",
+    "name": "Hailuo AI / MiniMax Chat Completions Video Generation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documented HTTP APIs for MiniMax's Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.\nVideo generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax's published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.\n\nContact Support:\n Name: MiniMax",
+      "type": "text/plain"
+    }
+  }
+}

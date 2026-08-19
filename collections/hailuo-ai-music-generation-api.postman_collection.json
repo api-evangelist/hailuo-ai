@@ -1,0 +1,191 @@
+{
+  "item": [
+    {
+      "id": "bb8c61b1-0129-4234-8ad4-119a0e1c3b9c",
+      "name": "Music Generation",
+      "description": {
+        "content": "Vocal music generation from prompt and lyrics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b7916960-ac15-41fe-bac9-7dc2bd302003",
+          "name": "Generate a vocal song (modeled)",
+          "request": {
+            "name": "Generate a vocal song (modeled)",
+            "description": {
+              "content": "Generates a vocal song from a music-style description (prompt) plus lyrics. Endpoint path and payload are modeled from MiniMax's published music API; reconcile against the live reference.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "music_generation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"lyrics\": \"<string>\",\n  \"audio_setting\": {\n    \"sample_rate\": \"<integer>\",\n    \"bitrate\": \"<integer>\",\n    \"format\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2c76c71a-c9a1-42e3-9379-35011f750396",
+              "name": "Generated audio (hex-encoded or a URL) plus metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "music_generation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"music-1.5\",\n  \"prompt\": \"Upbeat synthwave with driving drums.\",\n  \"lyrics\": \"[verse] Neon lights over the city tonight\",\n  \"audio_setting\": {\n    \"sample_rate\": 44100,\n    \"bitrate\": 256000,\n    \"format\": \"mp3\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"audio\": \"string\"\n  },\n  \"base_resp\": {\n    \"status_code\": 0,\n    \"status_msg\": \"success\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2e97367-c6e3-47a1-ac06-994da360e1ff",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "music_generation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"music-1.5\",\n  \"prompt\": \"Upbeat synthwave with driving drums.\",\n  \"lyrics\": \"[verse] Neon lights over the city tonight\",\n  \"audio_setting\": {\n    \"sample_rate\": 44100,\n    \"bitrate\": 256000,\n    \"format\": \"mp3\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status_code\": 0,\n  \"status_msg\": \"success\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.minimax.io/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a5e5c96a-cb70-49e9-baf5-c011a68b53ea",
+    "name": "Hailuo AI / MiniMax Chat Completions Music Generation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Documented HTTP APIs for MiniMax's Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.\nVideo generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax's published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.\n\nContact Support:\n Name: MiniMax",
+      "type": "text/plain"
+    }
+  }
+}

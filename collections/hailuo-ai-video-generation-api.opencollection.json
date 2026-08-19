@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hailuo AI / MiniMax Chat Completions Video Generation API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Video Generation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a video generation task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.minimax.io/v1/video_generation",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a video generation request and returns a task_id. Supports text-to-video (prompt only), image-to-video (first_frame_image), first-and-last-frame video (first_frame_image + last_frame_image), and subject-reference video (subject_reference for face-consistent characters). The task is processed asynchronously; poll GET /query/video_generation with the returned task_id."
+        },
+        {
+          "info": {
+            "name": "Query a video generation task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.minimax.io/v1/query/video_generation",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "query",
+                "description": "The task_id returned by POST /video_generation."
+              }
+            ]
+          },
+          "docs": "Checks the status of a video generation task by task_id. Status progresses through Queueing, Preparing, Processing, then Success (which includes a file_id) or Fail. A polling interval of about 10 seconds is recommended to avoid unnecessary load."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

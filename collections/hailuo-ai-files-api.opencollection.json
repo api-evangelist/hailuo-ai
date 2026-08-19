@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hailuo AI / MiniMax Chat Completions Files API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a generated file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.minimax.io/v1/files/retrieve",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "query",
+                "description": "The file_id returned by a successful query response."
+              }
+            ]
+          },
+          "docs": "Retrieves a generated asset by file_id and returns a temporary download URL. For video, the returned URL is valid for roughly 9 hours (32,400 seconds) before it expires."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
