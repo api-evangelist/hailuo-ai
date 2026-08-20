@@ -32,6 +32,15 @@ tags:
 - Generative AI
 - Text-to-Video
 - Image-to-Video
+- Text-to-Speech
+- LLM
+- Foundation Models
+tags_raw:
+- Video Generation
+- AI Video
+- Generative AI
+- Text-to-Video
+- Image-to-Video
 - Text to Speech
 - LLM
 - Foundation Models
@@ -71,6 +80,8 @@ apis:
   humanURL: https://platform.minimax.io/docs/guides/video-generation
   baseURL: https://api.minimax.io/v1
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -123,6 +134,8 @@ apis:
   humanURL: https://platform.minimax.io/docs/guides/video-generation
   baseURL: https://api.minimax.io/v1
   tags:
+  - Text-to-Speech
+  tags_raw:
   - Text to Speech
   properties:
   - type: OpenAPI
