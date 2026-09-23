@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Hailuo AI / MiniMax Chat Completions Text to Speech API
-  description: 'Documented HTTP APIs for MiniMax''s Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.
-
-    Video generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax''s published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.'
+  title: Hailuo AI / MiniMax Text to Speech API
+  description: Documented HTTP APIs for MiniMax's Hailuo generative video and audio platform.
   version: '1.0'
   contact:
     name: MiniMax
@@ -20,14 +18,14 @@ servers:
 security:
 - bearerAuth: []
 tags:
-- name: Text to Speech
+- name: Text To Speech
   description: Speech synthesis (T2A v2).
 paths:
   /t2a_v2:
     post:
       operationId: createSpeech
       tags:
-      - Text to Speech
+      - Text To Speech
       summary: Synthesize speech (T2A v2)
       description: Synchronous text-to-speech over HTTP using the speech-2.8 / speech-2.6 / speech-02 / speech-01 HD or turbo models. Text must be under 10,000 characters. A real-time WebSocket variant is documented separately at wss://api.minimax.io/ws/v1/t2a_v2 (see the AsyncAPI document).
       requestBody:
@@ -62,6 +60,17 @@ components:
           type: object
         base_resp:
           $ref: '#/components/schemas/BaseResp'
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
     T2ARequest:
       type: object
       required:
@@ -114,17 +123,6 @@ components:
             format:
               type: string
               example: mp3
-    BaseResp:
-      type: object
-      description: Standard MiniMax response status wrapper.
-      properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
-          type: string
-          example: success
   responses:
     Unauthorized:
       description: Missing or invalid API key.

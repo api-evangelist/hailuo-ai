@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Hailuo AI / MiniMax Chat Completions API
-  description: 'Documented HTTP APIs for MiniMax''s Hailuo generative video and audio platform. The primary surface is AI video generation (Hailuo models), which follows an asynchronous three-step pattern: create a task (POST /video_generation) to receive a task_id, poll status (GET /query/video_generation) until it returns a file_id, then retrieve the file (GET /files/retrieve) to obtain a temporary download URL for the finished MP4. The same platform also serves text-to-speech (T2A), OpenAI-compatible chat completions, and music generation. All endpoints authenticate with a Bearer API key from the MiniMax console.
-
-    Video generation endpoints, methods, the async task/query/retrieve flow, model names, and core parameters are grounded in MiniMax''s published documentation. Request and response schemas are modeled to reflect the documented fields; treat exact field-level shapes as approximate and reconcile against the live API reference. The text-to-speech, chat-completions, and music-generation request bodies are modeled representative payloads.'
+  description: Documented HTTP APIs for MiniMax's Hailuo generative video and audio platform.
   version: '1.0'
   contact:
     name: MiniMax
@@ -47,6 +45,43 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    ChatCompletionRequest:
+      type: object
+      required:
+      - model
+      - messages
+      properties:
+        model:
+          type: string
+          description: MiniMax LLM model identifier.
+          example: MiniMax-M1
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum:
+                - system
+                - user
+                - assistant
+                - tool
+              content:
+                type: string
+        stream:
+          type: boolean
+          example: false
+        temperature:
+          type: number
+          example: 1.0
+        max_tokens:
+          type: integer
+          example: 1024
+        tools:
+          type: array
+          items:
+            type: object
     ChatCompletionResponse:
       type: object
       properties:
@@ -86,43 +121,6 @@ components:
               type: integer
         base_resp:
           $ref: '#/components/schemas/BaseResp'
-    ChatCompletionRequest:
-      type: object
-      required:
-      - model
-      - messages
-      properties:
-        model:
-          type: string
-          description: MiniMax LLM model identifier.
-          example: MiniMax-M1
-        messages:
-          type: array
-          items:
-            type: object
-            properties:
-              role:
-                type: string
-                enum:
-                - system
-                - user
-                - assistant
-                - tool
-              content:
-                type: string
-        stream:
-          type: boolean
-          example: false
-        temperature:
-          type: number
-          example: 1.0
-        max_tokens:
-          type: integer
-          example: 1024
-        tools:
-          type: array
-          items:
-            type: object
     BaseResp:
       type: object
       description: Standard MiniMax response status wrapper.
