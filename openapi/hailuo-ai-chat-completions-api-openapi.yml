@@ -45,43 +45,17 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ChatCompletionRequest:
+    BaseResp:
       type: object
-      required:
-      - model
-      - messages
+      description: Standard MiniMax response status wrapper.
       properties:
-        model:
-          type: string
-          description: MiniMax LLM model identifier.
-          example: MiniMax-M1
-        messages:
-          type: array
-          items:
-            type: object
-            properties:
-              role:
-                type: string
-                enum:
-                - system
-                - user
-                - assistant
-                - tool
-              content:
-                type: string
-        stream:
-          type: boolean
-          example: false
-        temperature:
-          type: number
-          example: 1.0
-        max_tokens:
+        status_code:
           type: integer
-          example: 1024
-        tools:
-          type: array
-          items:
-            type: object
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
     ChatCompletionResponse:
       type: object
       properties:
@@ -121,17 +95,43 @@ components:
               type: integer
         base_resp:
           $ref: '#/components/schemas/BaseResp'
-    BaseResp:
+    ChatCompletionRequest:
       type: object
-      description: Standard MiniMax response status wrapper.
+      required:
+      - model
+      - messages
       properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
+        model:
           type: string
-          example: success
+          description: MiniMax LLM model identifier.
+          example: MiniMax-M1
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum:
+                - system
+                - user
+                - assistant
+                - tool
+              content:
+                type: string
+        stream:
+          type: boolean
+          example: false
+        temperature:
+          type: number
+          example: 1.0
+        max_tokens:
+          type: integer
+          example: 1024
+        tools:
+          type: array
+          items:
+            type: object
   responses:
     Unauthorized:
       description: Missing or invalid API key.

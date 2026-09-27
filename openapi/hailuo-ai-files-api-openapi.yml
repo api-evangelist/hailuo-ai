@@ -46,17 +46,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    BaseResp:
-      type: object
-      description: Standard MiniMax response status wrapper.
-      properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
-          type: string
-          example: success
     FileRetrieveResponse:
       type: object
       properties:
@@ -84,6 +73,17 @@ components:
               example: https://public-cdn.minimax.io/.../output.mp4
         base_resp:
           $ref: '#/components/schemas/BaseResp'
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
   responses:
     Unauthorized:
       description: Missing or invalid API key.

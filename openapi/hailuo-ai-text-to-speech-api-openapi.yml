@@ -45,6 +45,17 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
     T2AResponse:
       type: object
       properties:
@@ -60,17 +71,6 @@ components:
           type: object
         base_resp:
           $ref: '#/components/schemas/BaseResp'
-    BaseResp:
-      type: object
-      description: Standard MiniMax response status wrapper.
-      properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
-          type: string
-          example: success
     T2ARequest:
       type: object
       required:

@@ -47,6 +47,7 @@ tags:
 - Text-to-Speech
 - LLM
 - Foundation Models
+- Real-Time
 tags_raw:
 - Video Generation
 - AI Video
@@ -56,6 +57,7 @@ tags_raw:
 - Text to Speech
 - LLM
 - Foundation Models
+- Real-Time
 created: '2026-07-11'
 modified: '2026-07-11'
 specificationVersion: '0.23'
