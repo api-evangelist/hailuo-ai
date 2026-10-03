@@ -45,17 +45,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    BaseResp:
-      type: object
-      description: Standard MiniMax response status wrapper.
-      properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
-          type: string
-          example: success
     ChatCompletionResponse:
       type: object
       properties:
@@ -132,6 +121,17 @@ components:
           type: array
           items:
             type: object
+    BaseResp:
+      type: object
+      description: Standard MiniMax response status wrapper.
+      properties:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
   responses:
     Unauthorized:
       description: Missing or invalid API key.
