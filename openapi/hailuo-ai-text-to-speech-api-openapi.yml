@@ -45,21 +45,17 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    T2AResponse:
+    BaseResp:
       type: object
+      description: Standard MiniMax response status wrapper.
       properties:
-        data:
-          type: object
-          properties:
-            audio:
-              type: string
-              description: Hex-encoded audio bytes (or a URL, per audio settings).
-            status:
-              type: integer
-        extra_info:
-          type: object
-        base_resp:
-          $ref: '#/components/schemas/BaseResp'
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
+          type: string
+          example: success
     T2ARequest:
       type: object
       required:
@@ -112,17 +108,21 @@ components:
             format:
               type: string
               example: mp3
-    BaseResp:
+    T2AResponse:
       type: object
-      description: Standard MiniMax response status wrapper.
       properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
-          type: string
-          example: success
+        data:
+          type: object
+          properties:
+            audio:
+              type: string
+              description: Hex-encoded audio bytes (or a URL, per audio settings).
+            status:
+              type: integer
+        extra_info:
+          type: object
+        base_resp:
+          $ref: '#/components/schemas/BaseResp'
   responses:
     Unauthorized:
       description: Missing or invalid API key.

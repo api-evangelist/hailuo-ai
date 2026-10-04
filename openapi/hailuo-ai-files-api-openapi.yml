@@ -45,13 +45,6 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BaseResp'
   schemas:
     BaseResp:
       type: object
@@ -91,6 +84,13 @@ components:
               example: https://public-cdn.minimax.io/.../output.mp4
         base_resp:
           $ref: '#/components/schemas/BaseResp'
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResp'
   securitySchemes:
     bearerAuth:
       type: http

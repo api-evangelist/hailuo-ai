@@ -68,28 +68,17 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    VideoGenerationQueryResponse:
+    BaseResp:
       type: object
+      description: Standard MiniMax response status wrapper.
       properties:
-        task_id:
+        status_code:
+          type: integer
+          description: 0 indicates success; non-zero indicates an error.
+          example: 0
+        status_msg:
           type: string
-          example: '106916112212032'
-        status:
-          type: string
-          description: Task status.
-          enum:
-          - Queueing
-          - Preparing
-          - Processing
-          - Success
-          - Fail
-          example: Success
-        file_id:
-          type: string
-          description: Present when status is Success; pass to GET /files/retrieve to obtain the download URL.
-          example: '205258526306433'
-        base_resp:
-          $ref: '#/components/schemas/BaseResp'
+          example: success
     VideoGenerationRequest:
       type: object
       required:
@@ -143,17 +132,6 @@ components:
           type: boolean
           description: When true, MiniMax automatically refines the prompt.
           example: true
-    BaseResp:
-      type: object
-      description: Standard MiniMax response status wrapper.
-      properties:
-        status_code:
-          type: integer
-          description: 0 indicates success; non-zero indicates an error.
-          example: 0
-        status_msg:
-          type: string
-          example: success
     VideoGenerationCreateResponse:
       type: object
       properties:
@@ -161,6 +139,28 @@ components:
           type: string
           description: Identifier used to poll GET /query/video_generation.
           example: '106916112212032'
+        base_resp:
+          $ref: '#/components/schemas/BaseResp'
+    VideoGenerationQueryResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: '106916112212032'
+        status:
+          type: string
+          description: Task status.
+          enum:
+          - Queueing
+          - Preparing
+          - Processing
+          - Success
+          - Fail
+          example: Success
+        file_id:
+          type: string
+          description: Present when status is Success; pass to GET /files/retrieve to obtain the download URL.
+          example: '205258526306433'
         base_resp:
           $ref: '#/components/schemas/BaseResp'
   responses:
