@@ -200,6 +200,8 @@ apis:
   - type: Documentation
     url: https://platform.minimax.io/docs/api-reference/music-generation
 common:
+- type: Pricing
+  url: https://platform.minimax.io/docs/pricing/overview
 - type: AgenticAccess
   url: agentic-access/hailuo-ai-agentic-access.yml
 - type: Authentication
