@@ -1,146 +1,404 @@
-specification: API Commons Plans
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
-provider: Hailuo AI / MiniMax
-providerId: hailuo-ai
-created: '2026-07-11'
-modified: '2026-07-11'
-reconciled: false
-tags:
-- Video Generation
-- AI Video
-- Generative AI
-- Text-to-Video
-- Plans
-description: >-
-  MiniMax offers two purchasing paths. Consumer Hailuo AI plans (hailuoai.video)
-  are monthly subscriptions from a free tier up to about $199.99/month, granting a
-  monthly pool of credits (roughly 1,000 to 20,000) that generate videos. The
-  developer platform (platform.minimax.io) is separate and is billed on a
-  pay-as-you-go basis: video generation is metered in "video points" per clip
-  (varying by model, resolution, and duration), and text/audio APIs are metered
-  per token / per character. Failed generations or clips blocked by security
-  review are not charged.
-notes: >-
-  Video-point costs below are grounded in MiniMax's published video pricing but
-  can change; verify current rates at platform.minimax.io/docs/guides/pricing-video.
-  Per-clip API cost has been reported in the roughly $0.19-$0.56 range depending
-  on model/resolution/duration. Token and per-character rates for chat and TTS are
-  not reconciled here.
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://platform.minimax.io/docs/pricing/overview
 sources:
-- https://platform.minimax.io/docs/guides/pricing-video
-- https://hailuoai.video/subscribe
-- https://www.minimax.io/
+- https://platform.minimax.io/docs/pricing/overview
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T112025
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: per-call
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+published: true
+note: Comprehensive MiniMax platform pricing page covering LLM, audio, video, image, music, MCP/server
+  tools pay-as-you-go rates plus audio subscription tiers and prepaid video packages. 3-month (10% off)
+  and yearly (20% off) subscription prices also listed.
+plan_count: 25
+currency: USD
 plans:
-- id: hailuo-consumer-free
-  name: Hailuo AI Free (Consumer)
-  type: free
-  description: >-
-    Free consumer tier on hailuoai.video with a limited monthly credit allowance
-    for trying video and image generation in the web app.
-  entries:
-  - label: Monthly Credits
-    name: free_credits
-    type: usage
-    metric: credits
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1
-    price: $0 (limited monthly credit allowance)
-    userMultiplied: false
-  elements:
-  - name: Web App Access
-  - name: Hailuo Video Generation
-- id: hailuo-consumer-subscription
-  name: Hailuo AI Subscription (Consumer)
-  type: paid
-  description: >-
-    Consumer monthly subscriptions ranging up to about $199.99/month, granting a
-    monthly credit pool (approximately 1,000 to 20,000 credits) that generates
-    roughly 40 to 900 videos at economical settings.
-  entries:
-  - label: Monthly Credit Pool
-    name: subscription_credits
-    type: usage
-    metric: credits
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1
-    price: tiered monthly (up to ~$199.99/mo); ~1,000-20,000 credits per tier
-    userMultiplied: false
-  elements:
-  - name: Higher Credit Allowance
-  - name: Faster / Priority Generation
-  - name: Higher Resolution Options
-- id: minimax-api-payg
-  name: MiniMax Developer API (Pay-As-You-Go)
-  type: usage
-  description: >-
-    Self-service developer platform billed by consumption. Video generation is
-    metered in video points per clip; chat/LLM and audio APIs are metered per
-    token / per character. Reported per-clip API cost is roughly $0.19-$0.56.
-  entries:
-  - label: Video Generation (video points per clip)
-    name: video_points
-    type: usage
-    metric: clips
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1
-    price: >-
-      per-clip video points, e.g. MiniMax-Hailuo-02 512P/6s = 0.3 pts, 768P/6s =
-      1 pt, 1080P/6s = 2 pts; MiniMax-Hailuo-2.3-Fast 1080P/6s = 1.3 pts
-    userMultiplied: false
-  - label: Text / Chat (per token)
-    name: llm_tokens
-    type: usage
-    metric: tokens
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1000000
-    price: per-million-token pricing per model (see platform pricing)
-    userMultiplied: false
-  - label: Text-to-Speech (per character)
-    name: tts_characters
-    type: usage
-    metric: characters
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1000000
-    price: per-character pricing per speech model (see platform pricing)
-    userMultiplied: false
-  elements:
-  - name: Video Generation API (Hailuo)
-  - name: Chat Completions API
-  - name: Text-to-Speech API (HTTP + WebSocket)
-  - name: Music Generation API
-  - name: No Charge for Failed / Blocked Generations
-- id: minimax-enterprise
-  name: Enterprise / Custom
-  type: enterprise
-  description: >-
-    Custom terms for high-volume API usage, dedicated capacity, and negotiated
-    rates. Contact MiniMax.
-  entries:
-  - label: Enterprise Agreement
-    name: enterprise
-    type: flat
-    metric: contract
-    limit: -1
-    timeFrame: year
-    geo: global
-    unit: 1
-    price: contact sales
-    userMultiplied: false
-  elements:
-  - name: Volume Discounts
-  - name: Dedicated Capacity
-  - name: Support and SLAs
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+- name: MiniMax-M3 ≤ 512k input tokens (Standard, input)
+  price_text: $0.60 $0.30 / M tokens
+  currency: USD
+  period: per-use
+  unit: M tokens
+- name: MiniMax-M2.7 input
+  price_text: $0.3 / M tokens
+  price: 0.3
+  currency: USD
+  period: per-use
+  unit: M tokens
+- name: MiniMax-M2.7 output
+  price_text: $1.2 / M tokens
+  price: 1.2
+  currency: USD
+  period: per-use
+  unit: M tokens
+- name: Speech Recognition (Speech-to-Text)
+  price_text: $0.38 / hour
+  price: 0.38
+  currency: USD
+  period: per-use
+  unit: hour
+- name: T2A speech-2.8-hd
+  price_text: $100 / M characters
+  price: 100
+  currency: USD
+  period: per-use
+  unit: M characters
+- name: T2A speech-2.8-turbo
+  price_text: $60 / M characters
+  price: 60
+  currency: USD
+  period: per-use
+  unit: M characters
+- name: Voice Design
+  price_text: $3 per voice
+  price: 3
+  currency: USD
+  period: per-use
+  unit: voice
+- name: Rapid Voice Cloning
+  price_text: $1.5 per voice
+  price: 1.5
+  currency: USD
+  period: per-use
+  unit: voice
+- name: MiniMax-H3 768P video
+  price_text: $0.08 / second
+  price: 0.08
+  currency: USD
+  period: per-use
+  unit: second
+- name: MiniMax-H3 2K video
+  price_text: $0.13 / second
+  price: 0.13
+  currency: USD
+  period: per-use
+  unit: second
+- name: MiniMax-H3-Max 480P
+  price_text: $0.05 / second
+  price: 0.05
+  currency: USD
+  period: per-use
+  unit: second
+- name: image-01
+  price_text: $0.0035 per image
+  price: 0.0035
+  currency: USD
+  period: per-use
+  unit: image
+- name: Music-3.0 (Discontinued)
+  price_text: $0.15/up-to-5 minutes music
+  price: 0.15
+  currency: USD
+  period: per-use
+  unit: up to 5 minutes music
+- name: API-vlm (MCP)
+  price_text: $0.01 / request
+  price: 0.01
+  currency: USD
+  period: per-use
+  unit: request
+- name: web_search server tool
+  price_text: $0.01 / request
+  price: 0.01
+  currency: USD
+  period: per-use
+  unit: request
+- name: Audio Subscription Starter (monthly)
+  price_text: $5
+  price: 5
+  currency: USD
+  period: month
+  unit: subscription
+  included_quota: '100,000 audio points per month; Voice slots: 10'
+- name: Audio Subscription Standard (monthly)
+  price_text: $30
+  price: 30
+  currency: USD
+  period: month
+  unit: subscription
+  included_quota: '300,000 audio points per month; Voice slots: 100'
+- name: Audio Subscription Pro (monthly)
+  price_text: $99
+  price: 99
+  currency: USD
+  period: month
+  unit: subscription
+  included_quota: '1,100,000 audio points per month; Voice slots: 250'
+- name: Audio Subscription Scale (monthly)
+  price_text: $249
+  price: 249
+  currency: USD
+  period: month
+  unit: subscription
+  included_quota: '3,300,000 audio points per month; Voice slots: 500'
+- name: Audio Subscription Business (monthly)
+  price_text: $999
+  price: 999
+  currency: USD
+  period: month
+  unit: subscription
+  included_quota: '20,000,000 audio points per month; Voice slots: 800'
+- name: Video Package Standard
+  price_text: $1,000
+  price: 1000
+  currency: USD
+  period: month
+  unit: package
+  included_quota: 3,760 video points, valid 1 month
+- name: Video Package Pro
+  price_text: $2,500
+  price: 2500
+  currency: USD
+  period: month
+  unit: package
+  included_quota: 9,920 video points, valid 1 month
+- name: Video Package Scale
+  price_text: $4,500
+  price: 4500
+  currency: USD
+  period: month
+  unit: package
+  included_quota: 18,900 video points, valid 1 month
+- name: Video Package Business
+  price_text: $6,000
+  price: 6000
+  currency: USD
+  period: month
+  unit: package
+  included_quota: 26,780 video points, valid 1 month
+- name: Video Package Custom
+  price_text: contact sales for a custom plan
+  period: none
+  included_quota: As many video points as you need
+rate_limit_statements:
+- 'RPM: 10'
+- 'RPM: 50'
+- 'RPM: 200'
+- 'RPM: 500'
+- 'RPM: 800'
+- Unlimited RPM/TPM
+- 'RPM: 20'
+- 'RPM: 30'
+- 'RPM: 40'
+- 'RPM: 50'
+- RPM = 120, contact sales to increase
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - metered
+  - subscription
+  units:
+  - compute
+  - object
+  - period
+  - request
+  - token
+  plans:
+  - name: MiniMax-M3 ≤ 512k input tokens (Standard, input)
+    access: other
+    model: metered
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: MiniMax-M2.7 input
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: MiniMax-M2.7 output
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - token
+    periods:
+    - other
+  - name: Speech Recognition (Speech-to-Text)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: T2A speech-2.8-hd
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: T2A speech-2.8-turbo
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Voice Design
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Rapid Voice Cloning
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: MiniMax-H3 768P video
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: MiniMax-H3 2K video
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: MiniMax-H3-Max 480P
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: image-01
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - object
+    periods:
+    - other
+  - name: Music-3.0 (Discontinued)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: API-vlm (MCP)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - request
+    periods:
+    - other
+  - name: web_search server tool
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - request
+    periods:
+    - other
+  - name: Audio Subscription Starter (monthly)
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - month
+  - name: Audio Subscription Standard (monthly)
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - month
+  - name: Audio Subscription Pro (monthly)
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - month
+  - name: Audio Subscription Scale (monthly)
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - month
+  - name: Audio Subscription Business (monthly)
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - period
+    periods:
+    - month
+  - name: Video Package Standard
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Video Package Pro
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Video Package Scale
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Video Package Business
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Video Package Custom
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
