@@ -56,6 +56,21 @@ components:
         status_msg:
           type: string
           example: success
+    T2AResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            audio:
+              type: string
+              description: Hex-encoded audio bytes (or a URL, per audio settings).
+            status:
+              type: integer
+        extra_info:
+          type: object
+        base_resp:
+          $ref: '#/components/schemas/BaseResp'
     T2ARequest:
       type: object
       required:
@@ -108,21 +123,6 @@ components:
             format:
               type: string
               example: mp3
-    T2AResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            audio:
-              type: string
-              description: Hex-encoded audio bytes (or a URL, per audio settings).
-            status:
-              type: integer
-        extra_info:
-          type: object
-        base_resp:
-          $ref: '#/components/schemas/BaseResp'
   responses:
     Unauthorized:
       description: Missing or invalid API key.
