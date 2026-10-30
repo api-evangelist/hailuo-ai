@@ -1,4 +1,4 @@
-# Hailuo AI / MiniMax (hailuo-ai)
+# Hailuo AI / MiniMax
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,157 +64,144 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Hailuo AI is MiniMax's generative video and audio platform. MiniMax is a foundation-model company whose developer platform (`platform.minimax.io` / `api.minimax.io`, and `intl.minimaxi.com` for international users, `api.minimaxi.chat` for mainland China) exposes documented HTTP APIs for **AI video generation** (the Hailuo text-to-video and image-to-video models), large language model chat completions, text-to-speech, music generation, and voice cloning.
+Hailuo AI is MiniMax's generative video and audio platform. MiniMax is a Singapore- and China-based foundation-model company whose developer platform (platform.minimax.io / api.minimax.io, and intl.minimaxi.com for international users) exposes documented HTTP APIs for AI video generation (the Hailuo text-to-video and image-to-video models - MiniMax-Hailuo-2.3, MiniMax-Hailuo-02, Video-01, T2V-01, I2V-01, S2V-01), large language model chat completions (the MiniMax / abab family), text-to-speech (T2A) over both HTTP and a real-time WebSocket, music generation, and voice cloning. Video generation follows an asynchronous create-task-then-poll pattern; all APIs authenticate with a Bearer API key.
 
-The flagship surface for this entry is **video generation**. Hailuo video is produced by an asynchronous, three-step flow: create a task, poll its status, then retrieve the finished MP4 by a temporary download URL. All APIs authenticate with a **Bearer API key**.
+**Areas:** Video Generation · AI Video · Generative AI · Image-to-Video · Text-to-Speech · LLM · Foundation Models · Real-Time
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/hailuo-ai/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/hailuo-ai/refs/heads/main/apis.yml)
+## Hailuo AI / MiniMax on APIs.io
 
-## Access Model
+Everything profiled for Hailuo AI / MiniMax is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/hailuo-ai/](https://apis.io/providers/hailuo-ai/)** — or go straight to one of the APIs or properties below.
 
-- Public, self-service developer platform — sign up at [platform.minimax.io](https://platform.minimax.io/login).
-- Both **pay-as-you-go API keys** and **subscription keys** are issued from the console.
-- Video generation is metered in **video points per clip** (varies by model, resolution, and duration); chat and text-to-speech are metered per token / per character. Failed or security-blocked generations are not charged.
-- The consumer web app at `hailuoai.video` is a separate, subscription-based product; the entry here documents the **developer API**.
-- Endpoints, HTTP methods, model names, and the async workflow are grounded in MiniMax's live documentation. Detailed request/response JSON schemas are honestly **modeled** to reflect documented fields, and the `music_generation` endpoint payload is flagged as modeled — reconcile against the official reference before production use.
+### APIs (5)
 
-## Tags
+- [Hailuo AI / MiniMax Chat Completions API](https://apis.io/apis/hailuo-ai/hailuo-ai-chat-completions-api/) — OpenAI-compatible LLM chat completions.
+- [Hailuo AI / MiniMax Files API](https://apis.io/apis/hailuo-ai/hailuo-ai-files-api/) — Retrieve generated assets by file_id.
+- [Hailuo AI / MiniMax Music Generation API](https://apis.io/apis/hailuo-ai/hailuo-ai-music-generation-api/) — Vocal music generation from prompt and lyrics.
+- [Hailuo AI / MiniMax Text to Speech API](https://apis.io/apis/hailuo-ai/hailuo-ai-text-to-speech-api/) — Speech synthesis (T2A v2).
+- [Hailuo AI / MiniMax Video Generation API](https://apis.io/apis/hailuo-ai/hailuo-ai-video-generation-api/) — Asynchronous AI video generation with the Hailuo models.
 
-- Video Generation
-- AI Video
-- Generative AI
-- Text-to-Video
-- Image-to-Video
-- Text to Speech
-- LLM
-- Foundation Models
+### Published properties
 
-## Timestamps
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- **Created:** 2026-07-11
-- **Modified:** 2026-07-11
+#### AsyncAPI (1)
 
-## APIs
+Event-driven and webhook contracts.
 
-### Hailuo Video Generation API
+- [MiniMax Text-to-Speech (T2A) WebSocket API](https://apis.io/asyncapis/hailuo-ai/hailuo-ai-asyncapi/)
 
-Asynchronous AI video generation powered by the Hailuo models (MiniMax-Hailuo-2.3, MiniMax-Hailuo-02, Video-01, T2V-01, I2V-01, S2V-01). Supports text-to-video, image-to-video, first-and-last-frame video, and subject-reference video (face-consistent characters), with configurable duration and resolution up to 1080P.
+#### Event channels (1)
 
-Three-step flow:
+Individual events and webhooks the provider emits.
 
-1. `POST /v1/video_generation` → returns a `task_id`
-2. `GET /v1/query/video_generation?task_id=...` → poll until status is `Success`, returns a `file_id`
-3. `GET /v1/files/retrieve?file_id=...` → returns a temporary `download_url` (video URLs valid ~9 hours)
+- [/ws/v1/t2a_v2](https://apis.io/channels/hailuo-ai/ws-v1-t2a-v2/)
 
-- **Human URL:** [https://platform.minimax.io/docs/guides/video-generation](https://platform.minimax.io/docs/guides/video-generation)
-- **Base URL:** `https://api.minimax.io/v1`
+#### Agentic access (1)
 
-#### Tags
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- Video Generation
-- AI Video
-- Text-to-Video
-- Image-to-Video
-- Generative AI
+- [Hailuo Ai Agentic Access](https://apis.io/agentic-access/hailuo-ai/hailuo-ai-agentic-access/)
 
-#### Properties
+#### Collections (6)
 
-- [Documentation](https://platform.minimax.io/docs/guides/video-generation)
-- [API Reference](https://www.minimax.io/news/video-generation-api)
-- [OpenAPI](openapi/hailuo-ai-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/hailuo-ai.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/hailuo-ai.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Postman and Open Collection request collections.
 
-### MiniMax Text-to-Speech (T2A) API
+- [Hailuo AI / MiniMax API](https://apis.io/collections/hailuo-ai/open-hailuo-ai/)
+- [Hailuo AI / MiniMax Chat Completions API](https://apis.io/collections/hailuo-ai/open-hailuo-ai-chat-completions-api/)
+- [Hailuo AI / MiniMax Chat Completions Files API](https://apis.io/collections/hailuo-ai/open-hailuo-ai-files-api/)
+- [Hailuo AI / MiniMax Chat Completions Music Generation API](https://apis.io/collections/hailuo-ai/open-hailuo-ai-music-generation-api/)
+- [Hailuo AI / MiniMax Chat Completions Text to Speech API](https://apis.io/collections/hailuo-ai/open-hailuo-ai-text-to-speech-api/)
+- [Hailuo AI / MiniMax Chat Completions Video Generation API](https://apis.io/collections/hailuo-ai/open-hailuo-ai-video-generation-api/)
 
-Speech synthesis (T2A v2) across the speech-2.8, speech-2.6, speech-02, and speech-01 HD/turbo models, with 100+ voices, emotion and language control, and per-request voice/audio settings. Available both as a synchronous HTTP endpoint (`POST /v1/t2a_v2`) and as a documented **real-time WebSocket API** (`wss://api.minimax.io/ws/v1/t2a_v2`) that streams audio chunks as they are generated.
+#### Governance rules (1)
 
-- **Human URL:** [https://platform.minimax.io/docs/api-reference/speech-t2a-http](https://platform.minimax.io/docs/api-reference/speech-t2a-http)
-- **Base URL:** `https://api.minimax.io/v1`
+Spectral rulesets for the provider's contracts.
 
-#### Tags
+- [Hailuo AI / MiniMax — asyncapi rules](https://apis.io/rules/hailuo-ai/hailuo-ai-asyncapi-spectral-rules/)
 
-- Text to Speech
-- Audio
-- Voice
-- WebSocket
+#### Security (1)
 
-#### Properties
+Authentication, trust centre, and vulnerability disclosure.
 
-- [Documentation](https://platform.minimax.io/docs/api-reference/speech-t2a-http)
-- [OpenAPI](openapi/hailuo-ai-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [AsyncAPI](asyncapi/hailuo-ai-asyncapi.yml) — [AsyncAPI Specification](https://www.asyncapi.com/docs/reference/specification/v2.6.0)
-- [Postman Collection](collections/hailuo-ai.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Hailuo Ai Authentication](https://apis.io/security/hailuo-ai/hailuo-ai-authentication/)
 
-### MiniMax Chat Completions API
+#### Plans and pricing (1)
 
-OpenAI-compatible chat completions (`POST /v1/chat/completions`) served by MiniMax's large language models (the MiniMax-M / abab family), with streaming, tool/function calling, and long-context support.
+Published plans, tiers and prices.
 
-- **Human URL:** [https://platform.minimax.io/docs/api-reference/text-generation](https://platform.minimax.io/docs/api-reference/text-generation)
-- **Base URL:** `https://api.minimax.io/v1`
+- [Hailuo Ai Plans Pricing](https://apis.io/plans/hailuo-ai/hailuo-ai-plans-pricing/)
 
-#### Tags
+#### Rate limits (1)
 
-- LLM
-- Chat
-- Completions
-- Foundation Models
+Published request limits.
 
-#### Properties
+- [Hailuo Ai Rate Limits](https://apis.io/rate-limits/hailuo-ai/hailuo-ai-rate-limits/)
 
-- [Documentation](https://platform.minimax.io/docs/api-reference/text-generation)
-- [OpenAPI](openapi/hailuo-ai-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/hailuo-ai.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+#### FinOps (1)
 
-### MiniMax Music Generation API
+What the API costs to run, by operation.
 
-Generates a vocal song from a music-style description (prompt) plus lyrics via `POST /v1/music_generation`. Endpoint path and payload are **modeled** from MiniMax's published music API; confirm exact fields against the live reference during reconciliation.
+- [Hailuo Ai Finops](https://apis.io/finops/hailuo-ai/hailuo-ai-finops/)
 
-- **Human URL:** [https://platform.minimax.io/docs/api-reference/music-generation](https://platform.minimax.io/docs/api-reference/music-generation)
-- **Base URL:** `https://api.minimax.io/v1`
+## Where to find this API
 
-#### Tags
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- Music Generation
-- Audio
-- Generative AI
-
-#### Properties
-
-- [Documentation](https://platform.minimax.io/docs/api-reference/music-generation)
-- [OpenAPI](openapi/hailuo-ai-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### MiniMax Files API
-
-Retrieves generated assets by `file_id` (`GET /v1/files/retrieve`), returning a temporary download URL — video URLs are valid for roughly 9 hours (32,400 seconds). Used to fetch the finished MP4 after a video task completes.
-
-- **Human URL:** [https://platform.minimax.io/docs/api-reference](https://platform.minimax.io/docs/api-reference)
-- **Base URL:** `https://api.minimax.io/v1`
-
-#### Tags
-
-- Files
-- Storage
-- Downloads
-
-#### Properties
-
-- [Documentation](https://platform.minimax.io/docs/guides/video-generation)
-- [OpenAPI](openapi/hailuo-ai-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-## Common Properties
-
-- [Authentication](authentication/hailuo-ai-authentication.yml)
-- [LinkedIn](https://www.linkedin.com/company/minimax-ai)
 - [Website](https://www.minimax.io/)
 - [Documentation](https://platform.minimax.io/docs)
-- [Plans](plans/hailuo-ai-plans-pricing.yml)
-- [Rate Limits](rate-limits/hailuo-ai-rate-limits.yml)
-- [Fin Ops](finops/hailuo-ai-finops.yml)
-- [Sign Up](https://platform.minimax.io/login)
+- [Pricing](https://platform.minimax.io/docs/pricing/overview)
+- [Sign up](https://platform.minimax.io/login)
 - [Blog](https://www.minimax.io/news)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 38.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 57.6 |
+| Contract governance | 11.4 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 32.1 |
+| Access clarity | 55.3 |
+
+**Agent readiness 19.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 5.5** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/hailuo-ai/](https://apis.io/providers/hailuo-ai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Hailuo AI / MiniMax: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/hailuo-ai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
